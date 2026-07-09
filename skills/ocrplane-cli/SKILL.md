@@ -9,7 +9,7 @@ author: ToolPlane
 Use this skill for OCR and document understanding when files are available on
 the local machine or inside the active sandbox/workspace.
 
-The primary tool is the `ocrplane` command from:
+The primary tool is the `ocrplane` command. Install it with `uv`:
 
 ```bash
 uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
@@ -50,13 +50,39 @@ Before OCR work, verify the CLI exists:
 ocrplane --help
 ```
 
-If it is missing and `uv` is available, install it:
+If `ocrplane` is missing, use `uv` first. Check whether `uv` exists:
+
+```bash
+uv --version
+```
+
+If `uv` is missing, install `uv` with the official standalone installer:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+After installing `uv`, ensure its bin directory is on `PATH`. In most shells,
+reloading the shell profile or exporting `PATH="$HOME/.local/bin:$PATH"` is
+enough:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Then install or upgrade `ocrplane`:
 
 ```bash
 uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
 ```
 
-For one-off use without installing:
+If `ocrplane` is already installed but seems stale, upgrade it:
+
+```bash
+uv tool upgrade ocrplane-cli
+```
+
+For one-off use without persistent installation:
 
 ```bash
 uvx --from "git+https://github.com/asharca/ocrplane-cli.git" ocrplane --help
