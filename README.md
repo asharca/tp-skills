@@ -31,7 +31,6 @@ platform preserve slugs, categories, curation status, and scores.
 
 ## Included Skills
 
-- `mineru-ocr` — Use an attached OcrPlane OCR MCP deployment.
 - `ocrplane-cli` — Use the `ocrplane` CLI for sandbox/local document OCR.
 
 ## Automatic Sync
