@@ -25,16 +25,6 @@ OCRPLANE_BASE_URL
 OCRPLANE_API_KEY
 ```
 
-Compatibility variables may also work:
-
-```txt
-MINERU_API_BASE_URL
-MINERU_BASE_URL
-MINERU_API_KEY
-API_KEY
-APIKEY
-```
-
 If credentials are missing, explain that the OcrPlane environment variables are
 not configured.
 
