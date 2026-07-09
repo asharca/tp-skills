@@ -43,3 +43,17 @@ Events: push
 
 ToolPlane will verify GitHub's `X-Hub-Signature-256` header and sync this
 registry whenever `main` receives a push.
+
+For GitHub API rate limits, configure exactly one token variable in ToolPlane:
+
+```txt
+GITHUB_TOKEN=...
+```
+
+or:
+
+```txt
+TOOLPLANE_GITHUB_TOKEN=...
+```
+
+Do not set both. If both are present, ToolPlane uses `GITHUB_TOKEN`.

@@ -35,3 +35,6 @@ The sync command reads these optional variables:
 - `TP_SKILLS_ROOT`
 - `TP_SKILLS_SLUG_PREFIX`
 - `GITHUB_TOKEN` or `TOOLPLANE_GITHUB_TOKEN`
+
+Set only one GitHub token variable. If both are present, ToolPlane uses
+`GITHUB_TOKEN`.
