@@ -46,13 +46,16 @@ Prefer `OCRPLANE_*` for new deployments.
 
 1. Call `parse_document` first.
 2. Prefer `file_url` for large files. Use `base64_content` only for small files.
-3. For Chinese documents use `lang: "ch"`; for mixed Chinese and English use
+3. Do not pass sandbox paths, chat attachment names, or relative paths such as
+   `hello.pdf` as `file_path`. `file_path` only works for files that exist
+   inside the OcrPlane MCP deployment container itself.
+4. For Chinese documents use `lang: "ch"`; for mixed Chinese and English use
    `lang: "ch,en"`.
-4. Start with `backend: "pipeline"` for speed. Use `hybrid-auto-engine` or a VLM
+5. Start with `backend: "pipeline"` for speed. Use `hybrid-auto-engine` or a VLM
    backend only when layout quality matters more than latency.
-5. Keep `formula_enable` and `table_enable` enabled for papers, reports,
+6. Keep `formula_enable` and `table_enable` enabled for papers, reports,
    invoices, and spreadsheets.
-6. For large PDFs, use `start_page_id` and `end_page_id` to process sections.
+7. For large PDFs, use `start_page_id` and `end_page_id` to process sections.
 
 ## Large Result Handling
 
@@ -72,4 +75,3 @@ For the user, return clean conclusions first, then cite extracted sections,
 tables, page numbers, or block context when relevant. If OCR confidence seems
 low, say so and suggest reprocessing with a different backend or selected page
 range.
-
