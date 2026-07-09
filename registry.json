@@ -1,5 +1,13 @@
 {
   "name": "ToolPlane Skills",
   "root": "skills",
-  "skills": []
+  "skills": [
+    {
+      "slug": "mineru-ocr",
+      "path": "skills/mineru-ocr",
+      "categories": ["documents", "developer-tools"],
+      "curated": true,
+      "score": 9000
+    }
+  ]
 }
