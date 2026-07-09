@@ -8,6 +8,13 @@
       "categories": ["documents", "developer-tools"],
       "curated": true,
       "score": 9000
+    },
+    {
+      "slug": "ocrplane-cli",
+      "path": "skills/ocrplane-cli",
+      "categories": ["documents", "developer-tools"],
+      "curated": true,
+      "score": 9100
     }
   ]
 }

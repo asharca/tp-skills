@@ -1,0 +1,163 @@
+---
+name: ocrplane-cli
+description: Use the OcrPlane CLI when the user uploads PDFs, images, DOCX, XLSX, PPTX, CSV, or asks to extract OCR text, markdown, tables, formulas, or structured document content from local or sandbox files.
+author: ToolPlane
+---
+
+# OcrPlane CLI Skill
+
+Use this skill for OCR and document understanding when files are available on
+the local machine or inside the active sandbox/workspace.
+
+The primary tool is the `ocrplane` command from:
+
+```bash
+uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
+```
+
+Do not use an MCP OCR tool for this skill. Prefer the CLI because it can read
+normal filesystem paths such as `/workspace/report.pdf`.
+
+## Authentication
+
+Never print, ask for, or hard-code API keys in commands or responses.
+
+The runtime must provide:
+
+```txt
+OCRPLANE_BASE_URL
+OCRPLANE_API_KEY
+```
+
+Compatibility variables may also work:
+
+```txt
+MINERU_API_BASE_URL
+MINERU_BASE_URL
+MINERU_API_KEY
+API_KEY
+APIKEY
+```
+
+If credentials are missing, explain that the OcrPlane environment variables are
+not configured.
+
+## Availability Check
+
+Before OCR work, verify the CLI exists:
+
+```bash
+ocrplane --help
+```
+
+If it is missing and `uv` is available, install it:
+
+```bash
+uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
+```
+
+For one-off use without installing:
+
+```bash
+uvx --from "git+https://github.com/asharca/ocrplane-cli.git" ocrplane --help
+```
+
+## Recommended Flow
+
+1. Resolve the actual file path. In sandboxes, prefer absolute paths under
+   `/workspace`.
+2. Validate the request without sending it when path or options are uncertain:
+
+   ```bash
+   ocrplane parse /workspace/report.pdf --json --dry-run
+   ```
+
+3. For small documents, submit and wait:
+
+   ```bash
+   ocrplane parse /workspace/report.pdf --json
+   ```
+
+4. For large files, submit asynchronously:
+
+   ```bash
+   ocrplane parse /workspace/large.pdf --json --no-wait
+   ```
+
+5. Poll until complete:
+
+   ```bash
+   ocrplane status <task_id> --json
+   ```
+
+6. Read results in bounded chunks:
+
+   ```bash
+   ocrplane markdown <task_id> --json --offset 0 --max-length 12000
+   ocrplane blocks <task_id> --json --offset 0 --limit 50
+   ```
+
+## Parameter Guidance
+
+- Chinese documents: `--lang ch`
+- Mixed Chinese/English: `--lang ch,en`
+- English-only documents: `--lang en`
+- Start with `--backend pipeline` for speed.
+- Use VLM or hybrid backends only when layout quality matters more than latency.
+- Keep `--formula` and `--table` enabled for papers, invoices, reports, and
+  spreadsheets.
+- For large PDFs, split work with `--start-page` and `--end-page`.
+
+Example:
+
+```bash
+ocrplane parse /workspace/a.pdf \
+  --backend pipeline \
+  --lang ch \
+  --parse-method auto \
+  --formula \
+  --table \
+  --json
+```
+
+## Large Result Handling
+
+Do not ask for unbounded full results for large documents.
+
+- Use `markdown --offset --max-length` for markdown paging.
+- Use `blocks --offset --limit` for structured extraction.
+- Use `result --max-markdown-length --max-blocks` only for small documents or
+  previews.
+- Use `--save-dir /workspace/ocr-output` when the user needs durable artifacts.
+
+Artifact example:
+
+```bash
+ocrplane parse /workspace/report.pdf --save-dir /workspace/ocr-report
+```
+
+This can create `summary.json`, `result.md`, `content_blocks.json`, and
+`pages.json`.
+
+## Structured Blocks
+
+`content_list` blocks may include `bbox`, `page_idx`, `text`, `table_body`,
+`list_items`, image paths, and other fields. For DOCX/Office inputs, some blocks
+may not have `bbox`; that is normal because the source document may not provide
+page coordinates.
+
+## Error Handling
+
+- If `ocrplane parse` times out while waiting, use `status <task_id>` to check
+  whether the server is still processing.
+- If the server reports a MineRU timeout, tell the user the backend timed out and
+  suggest a smaller page range, `--parse-method txt` for text PDFs, or a faster
+  backend.
+- If `--json` output is needed for automation, parse stdout as JSON and do not
+  rely on Rich human output.
+
+## Response Guidance
+
+Return the useful extracted answer first. Mention the task id and any output
+files only when they help the user continue. For uncertain OCR or failed tasks,
+state the failure plainly and suggest the next command to retry.

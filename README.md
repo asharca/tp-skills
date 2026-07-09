@@ -29,6 +29,11 @@ skills/
 `registry.json` is optional for ToolPlane, but keeping it explicit lets the
 platform preserve slugs, categories, curation status, and scores.
 
+## Included Skills
+
+- `mineru-ocr` — Use an attached OcrPlane OCR MCP deployment.
+- `ocrplane-cli` — Use the `ocrplane` CLI for sandbox/local document OCR.
+
 ## Automatic Sync
 
 After deploying ToolPlane with the tp-skills registry webhook route, create a
