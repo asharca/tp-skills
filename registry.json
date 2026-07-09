@@ -1,20 +1,5 @@
 {
   "name": "ToolPlane Skills",
   "root": "skills",
-  "skills": [
-    {
-      "slug": "toolplane-skill-author",
-      "path": "skills/toolplane-skill-author",
-      "categories": ["developer-tools", "agents"],
-      "curated": true,
-      "score": 9000
-    },
-    {
-      "slug": "toolplane-registry-sync",
-      "path": "skills/toolplane-registry-sync",
-      "categories": ["developer-tools", "deployment"],
-      "curated": true,
-      "score": 8900
-    }
-  ]
+  "skills": []
 }
