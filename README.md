@@ -28,3 +28,18 @@ skills/
 
 `registry.json` is optional for ToolPlane, but keeping it explicit lets the
 platform preserve slugs, categories, curation status, and scores.
+
+## Automatic Sync
+
+After deploying ToolPlane with the tp-skills registry webhook route, create a
+GitHub repository webhook for this repo:
+
+```txt
+Payload URL: https://<toolplane-host>/api/v1/skill-registries/tp-skills/webhook
+Content type: application/json
+Secret: the value of TP_SKILLS_WEBHOOK_SECRET
+Events: push
+```
+
+ToolPlane will verify GitHub's `X-Hub-Signature-256` header and sync this
+registry whenever `main` receives a push.
