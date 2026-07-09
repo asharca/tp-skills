@@ -1,22 +1,18 @@
 ---
 name: ocrplane-cli
-description: Use the OcrPlane CLI when the user uploads PDFs, images, DOCX, XLSX, PPTX, CSV, or asks to extract OCR text, markdown, tables, formulas, or structured document content from local or sandbox files.
+description: Use the OcrPlane CLI when the user uploads PDFs, images, DOCX, XLSX, PPTX, CSV, or asks to extract OCR text, markdown, tables, formulas, or structured document content.
 author: ToolPlane
 ---
 
 # OcrPlane CLI Skill
 
-Use this skill for OCR and document understanding when files are available on
-the local machine or inside the active sandbox/workspace.
+Use this skill for OCR and document understanding.
 
 The primary tool is the `ocrplane` command. Install it with `uv`:
 
 ```bash
 uv tool install "git+https://github.com/asharca/ocrplane-cli.git"
 ```
-
-Do not use an MCP OCR tool for this skill. Prefer the CLI because it can read
-normal filesystem paths such as `/workspace/report.pdf`.
 
 ## Authentication
 
@@ -90,24 +86,23 @@ uvx --from "git+https://github.com/asharca/ocrplane-cli.git" ocrplane --help
 
 ## Recommended Flow
 
-1. Resolve the actual file path. In sandboxes, prefer absolute paths under
-   `/workspace`.
+1. Resolve the actual file path.
 2. Validate the request without sending it when path or options are uncertain:
 
    ```bash
-   ocrplane parse /workspace/report.pdf --json --dry-run
+   ocrplane parse path/to/report.pdf --json --dry-run
    ```
 
 3. For small documents, submit and wait:
 
    ```bash
-   ocrplane parse /workspace/report.pdf --json
+   ocrplane parse path/to/report.pdf --json
    ```
 
 4. For large files, submit asynchronously:
 
    ```bash
-   ocrplane parse /workspace/large.pdf --json --no-wait
+   ocrplane parse path/to/large.pdf --json --no-wait
    ```
 
 5. Poll until complete:
@@ -137,7 +132,7 @@ uvx --from "git+https://github.com/asharca/ocrplane-cli.git" ocrplane --help
 Example:
 
 ```bash
-ocrplane parse /workspace/a.pdf \
+ocrplane parse path/to/a.pdf \
   --backend pipeline \
   --lang ch \
   --parse-method auto \
@@ -154,12 +149,12 @@ Do not ask for unbounded full results for large documents.
 - Use `blocks --offset --limit` for structured extraction.
 - Use `result --max-markdown-length --max-blocks` only for small documents or
   previews.
-- Use `--save-dir /workspace/ocr-output` when the user needs durable artifacts.
+- Use `--save-dir path/to/ocr-output` when the user needs durable artifacts.
 
 Artifact example:
 
 ```bash
-ocrplane parse /workspace/report.pdf --save-dir /workspace/ocr-report
+ocrplane parse path/to/report.pdf --save-dir path/to/ocr-report
 ```
 
 This can create `summary.json`, `result.md`, `content_blocks.json`, and
